@@ -1061,27 +1061,27 @@ func (app *App) serverErrorHandler(fctx *fasthttp.RequestCtx, err error) {
 	c := app.AcquireCtx(fctx)
 	defer app.ReleaseCtx(c)
 
-	var (
-		errNetOP *net.OpError
-		netErr   net.Error
-	)
+	//var (
+	//	errNetOP *net.OpError
+	//	netErr   net.Error
+	//)
 
-	switch {
-	case errors.As(err, new(*fasthttp.ErrSmallBuffer)):
-		err = ErrRequestHeaderFieldsTooLarge
-	case errors.As(err, &errNetOP) && errNetOP.Timeout():
-		err = ErrRequestTimeout
-	case errors.As(err, &netErr):
-		err = ErrBadGateway
-	case errors.Is(err, fasthttp.ErrBodyTooLarge):
-		err = ErrRequestEntityTooLarge
-	case errors.Is(err, fasthttp.ErrGetOnly):
-		err = ErrMethodNotAllowed
-	case strings.Contains(err.Error(), "timeout"):
-		err = ErrRequestTimeout
-	default:
-		err = NewError(StatusBadRequest, err.Error())
-	}
+	//switch {
+	//case errors.As(err, new(*fasthttp.ErrSmallBuffer)):
+	//	err = ErrRequestHeaderFieldsTooLarge
+	//case errors.As(err, &errNetOP) && errNetOP.Timeout():
+	//	err = ErrRequestTimeout
+	//case errors.As(err, &netErr):
+	//	err = ErrBadGateway
+	//case errors.Is(err, fasthttp.ErrBodyTooLarge):
+	//	err = ErrRequestEntityTooLarge
+	//case errors.Is(err, fasthttp.ErrGetOnly):
+	//	err = ErrMethodNotAllowed
+	//case strings.Contains(err.Error(), "timeout"):
+	//	err = ErrRequestTimeout
+	//default:
+	//	err = NewError(StatusBadRequest, err.Error())
+	//}
 
 	if catch := app.ErrorHandler(c, err); catch != nil {
 		log.Errorf("serverErrorHandler: failed to call ErrorHandler: %v", catch)
